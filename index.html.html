@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Egzamen — Dokiman Egzamen Ayisyen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a2e2a;
+    --paper:#f6f2e9;
+    --paper-2:#eee7d6;
+    --flag-blue:#1c3f60;
+    --flag-red:#b8342a;
+    --gold:#d1a13f;
+    --green-deep:#204a3d;
+    --line:#d8cdb2;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{
+    font-family:'Fraunces', serif;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit; text-decoration:none;}
+
+  /* subtle paper texture via layered gradients */
+  body{
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(28,63,96,0.05), transparent 40%),
+      radial-gradient(circle at 85% 15%, rgba(184,52,42,0.05), transparent 40%);
+  }
+
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 6vw;
+    border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    background:rgba(246,242,233,0.92);
+    backdrop-filter:blur(8px);
+    z-index:100;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:1.5rem;
+    color:var(--green-deep);
+  }
+  .logo .mark{
+    width:34px; height:34px;
+    border-radius:50%;
+    background:conic-gradient(var(--flag-blue) 0 50%, var(--flag-red) 50% 100%);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--paper);
+    font-size:0.85rem;
+    font-weight:700;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  nav{display:flex; gap:32px; align-items:center;}
+  nav a{
+    font-size:0.95rem;
+    font-weight:500;
+    color:var(--ink);
+    position:relative;
+    padding:4px 0;
+    cursor:pointer;
+  }
+  nav a::after{
+    content:'';
+    position:absolute; left:0; bottom:-2px;
+    width:0; height:2px;
+    background:var(--flag-red);
+    transition:width .25s ease;
+  }
+  nav a:hover::after{width:100%;}
+
+  .hero{
+    padding:9vh 6vw 7vh;
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:48px;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--flag-blue);
+    font-weight:600;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 4.6vw, 4rem);
+    font-weight:600;
+    color:var(--green-deep);
+    line-height:1.04;
+    margin-bottom:22px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--flag-red);
+  }
+  .hero p{
+    font-size:1.1rem;
+    max-width:46ch;
+    color:#3a4a45;
+    margin-bottom:34px;
+  }
+  .hero-actions{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    border:none;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{
+    background:var(--green-deep);
+    color:var(--paper);
+    box-shadow:0 6px 18px rgba(32,74,61,0.25);
+  }
+  .btn-secondary{
+    background:transparent;
+    color:var(--green-deep);
+    border:1.5px solid var(--green-deep);
+  }
+
+  .hero-visual{
+    position:relative;
+    aspect-ratio:4/5;
+    border-radius:22px;
+    background:linear-gradient(160deg, var(--flag-blue) 0%, #14304a 60%);
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(28,63,96,0.25);
+  }
+  .hero-visual .stamp{
+    position:absolute;
+    top:24px; right:24px;
+    width:74px; height:74px;
+    border-radius:50%;
+    border:2px dashed rgba(246,242,233,0.5);
+    display:flex; align-items:center; justify-content:center;
+    color:rgba(246,242,233,0.8);
+    font-size:0.62rem;
+    text-align:center;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    font-weight:600;
+    transform:rotate(8deg);
+  }
+  .hero-visual .doc-stack{
+    position:absolute; bottom:0; left:0; right:0;
+    padding:26px;
+  }
+  .doc-card{
+    background:var(--paper);
+    border-radius:10px;
+    padding:16px 18px;
+    margin-bottom:12px;
+    box-shadow:0 10px 24px rgba(0,0,0,0.2);
+    transform:translateY(0);
+    transition:transform .3s ease;
+  }
+  .doc-card:hover{transform:translateY(-4px) rotate(-1deg);}
+  .doc-card .tag{
+    font-size:0.68rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--flag-red);
+  }
+  .doc-card .title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.05rem;
+    color:var(--green-deep);
+    margin-top:4px;
+  }
+  .hero-visual .flag-corner{
+    position:absolute;
+    top:0; left:0;
+    width:0; height:0;
+    border-style:solid;
+    border-width:60px 60px 0 0;
+    border-color:var(--flag-red) transparent transparent transparent;
+    opacity:0.9;
+  }
+
+  section{padding:8vh 6vw;}
+  .section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    margin-bottom:44px;
+    flex-wrap:wrap;
+    gap:20px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:22px;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem,2.8vw,2.4rem);
+    color:var(--green-deep);
+    font-weight:600;
+  }
+  .section-head .num{
+    font-family:'Fraunces', serif;
+    font-size:0.85rem;
+    color:var(--flag-red);
+    font-weight:600;
+  }
+  .section-head p{color:#5a6a64; max-width:42ch;}
+
+  /* --- Filter / dropdown bar --- */
+  .filter-bar{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:38px;
+    align-items:center;
+  }
+  .select-wrap{
+    position:relative;
+    min-width:220px;
+  }
+  .select-wrap label{
+    display:block;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--flag-blue);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  select{
+    appearance:none;
+    -webkit-appearance:none;
+    width:100%;
+    padding:13px 40px 13px 16px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:0.95rem;
+    font-weight:500;
+    color:var(--ink);
+    cursor:pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%23204a3d' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 16px center;
+    transition:border-color .2s ease;
+  }
+  select:focus{outline:none; border-color:var(--flag-blue); box-shadow:0 0 0 3px rgba(28,63,96,0.12);}
+
+  .doc-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+    gap:20px;
+  }
+  .exam-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .exam-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 30px rgba(28,63,96,0.1);
+    border-color:var(--flag-blue);
+  }
+  .exam-card .row-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .badge{
+    font-size:0.68rem;
+    font-weight:700;
+    padding:5px 10px;
+    border-radius:999px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .badge.free{background:rgba(32,74,61,0.1); color:var(--green-deep);}
+  .badge.paid{background:rgba(184,52,42,0.1); color:var(--flag-red);}
+  .exam-card .level{
+    font-size:0.72rem;
+    color:var(--flag-blue);
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .exam-card h3{
+    font-family:'Fraunces', serif;
+    font-size:1.2rem;
+    color:var(--ink);
+    font-weight:600;
+  }
+  .exam-card .meta{
+    font-size:0.85rem;
+    color:#6a7a74;
+  }
+  .card-actions{
+    margin-top:auto;
+    display:flex;
+    gap:10px;
+  }
+  .dl-btn{
+    flex:1;
+    text-align:center;
+    padding:11px;
+    border-radius:8px;
+    font-weight:600;
+    font-size:0.88rem;
+    border:none;
+    cursor:pointer;
+    transition:background .2s ease;
+  }
+  .dl-btn.free{background:var(--green-deep); color:var(--paper);}
+  .dl-btn.free:hover{background:#163a2f;}
+  .dl-btn.paid{background:var(--flag-red); color:var(--paper);}
+  .dl-btn.paid:hover{background:#98291f;}
+
+  /* Subject category section */
+  .subject-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+    gap:18px;
+  }
+  .subject-card{
+    background:var(--green-deep);
+    color:var(--paper);
+    border-radius:var(--radius);
+    padding:26px 22px;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform .22s ease;
+    min-height:150px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .subject-card:hover{transform:translateY(-4px) scale(1.01);}
+  .subject-card .icon{font-size:1.8rem;}
+  .subject-card .sname{
+    font-family:'Fraunces', serif;
+    font-size:1.15rem;
+    font-weight:600;
+  }
+  .subject-card .scount{font-size:0.78rem; opacity:0.7;}
+  .subject-card::after{
+    content:'';
+    position:absolute;
+    right:-30px; bottom:-30px;
+    width:100px; height:100px;
+    border-radius:50%;
+    background:rgba(246,242,233,0.06);
+  }
+  .subject-card:nth-child(3n+2){background:var(--flag-blue);}
+  .subject-card:nth-child(3n+3){background:#3a2d20;}
+
+  /* Payment modal */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(20,30,28,0.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    padding:20px;
+  }
+  .modal-overlay.active{display:flex;}
+  .modal{
+    background:var(--paper);
+    border-radius:18px;
+    max-width:440px;
+    width:100%;
+    padding:34px;
+    position:relative;
+    box-shadow:0 30px 70px rgba(0,0,0,0.3);
+    animation:pop .25s ease;
+  }
+  @keyframes pop{from{transform:scale(0.94); opacity:0;} to{transform:scale(1); opacity:1;}}
+  .modal .close{
+    position:absolute; top:18px; right:18px;
+    width:32px; height:32px;
+    border-radius:50%;
+    background:var(--paper-2);
+    border:none;
+    cursor:pointer;
+    font-size:1rem;
+    color:var(--ink);
+  }
+  .modal h3{
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+    color:var(--green-deep);
+    margin-bottom:8px;
+  }
+  .modal .doc-name{
+    font-size:0.92rem;
+    color:var(--flag-red);
+    font-weight:600;
+    margin-bottom:22px;
+  }
+  .price-tag{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--paper-2);
+    padding:16px 18px;
+    border-radius:12px;
+    margin-bottom:24px;
+  }
+  .price-tag .amount{
+    font-family:'Fraunces', serif;
+    font-size:1.6rem;
+    font-weight:700;
+    color:var(--green-deep);
+  }
+  .price-tag .moncash-logo{
+    display:flex; align-items:center; gap:8px;
+    font-weight:700;
+    color:var(--flag-red);
+    font-size:0.85rem;
+  }
+  .step-list{
+    list-style:none;
+    margin-bottom:22px;
+    counter-reset:step;
+  }
+  .step-list li{
+    counter-increment:step;
+    padding-left:34px;
+    position:relative;
+    margin-bottom:12px;
+    font-size:0.92rem;
+    color:#3a4a45;
+  }
+  .step-list li::before{
+    content:counter(step);
+    position:absolute;
+    left:0; top:-2px;
+    width:24px; height:24px;
+    border-radius:50%;
+    background:var(--flag-blue);
+    color:var(--paper);
+    font-size:0.75rem;
+    font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .form-group{margin-bottom:16px;}
+  .form-group label{
+    display:block;
+    font-size:0.82rem;
+    font-weight:600;
+    margin-bottom:6px;
+    color:var(--ink);
+  }
+  .form-group input{
+    width:100%;
+    padding:13px 14px;
+    border-radius:9px;
+    border:1.5px solid var(--line);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:0.95rem;
+    background:#fff;
+  }
+  .form-group input:focus{outline:none; border-color:var(--flag-blue);}
+  .form-hint{font-size:0.78rem; color:#7a8a84; margin-top:5px;}
+  .submit-btn{
+    width:100%;
+    padding:15px;
+    border-radius:10px;
+    border:none;
+    background:var(--flag-red);
+    color:var(--paper);
+    font-weight:700;
+    font-size:0.98rem;
+    cursor:pointer;
+    transition:background .2s ease;
+  }
+  .submit-btn:hover{background:#98291f;}
+  .status-msg{
+    margin-top:14px;
+    padding:12px 14px;
+    border-radius:9px;
+    font-size:0.88rem;
+    display:none;
+  }
+  .status-msg.show{display:block;}
+  .status-msg.pending{background:#fff3d6; color:#8a6a1a;}
+  .status-msg.success{background:rgba(32,74,61,0.12); color:var(--green-deep);}
+
+  footer{
+    padding:6vh 6vw 4vh;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+    color:#7a8a84;
+    font-size:0.85rem;
+  }
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr; padding-top:6vh;}
+    .hero-visual{order:-1; max-width:340px; margin:0 auto;}
+    nav{display:none;}
+    header{justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="mark">Eg</span> Egzamen</div>
+  <nav>
+    <a onclick="scrollTo('#egzamen')">Egzamen</a>
+    <a onclick="scrollTo('#korije')">Korije</a>
+    <a onclick="scrollTo('#matyè')">Matyè</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Platfòm dokiman lekòl ayisyen</div>
+    <h1>Tout egzamen ou bezwen, <em>klase pou ou.</em></h1>
+    <p>Telechaje egzamen offisyèl gratis pou 6ème AF, 9ème AF, NS3, NS4 — ak korije yo pou 25 goud sèlman, peye ak MonCash.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="scrollTo('#egzamen')">Gade egzamen yo</button>
+      <button class="btn btn-secondary" onclick="scrollTo('#matyè')">Eksplore pa matyè</button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="flag-corner"></div>
+    <div class="stamp">Ofisyèl<br>Ayiti</div>
+    <div class="doc-stack">
+      <div class="doc-card">
+        <div class="tag">9ème AF · Mathématiques</div>
+        <div class="title">Épreuve Officielle 2025</div>
+      </div>
+      <div class="doc-card">
+        <div class="tag">NS4 · Physique</div>
+        <div class="title">Corrigé Détaillé</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="egzamen">
+  <div class="section-head">
+    <div>
+      <div class="num">01 — Gratis</div>
+      <h2>Egzamen pou telechaje</h2>
+      <p>Chwazi nivo ou nan meni an pou wè tout egzamen ki disponib.</p>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="select-wrap">
+      <label for="level-filter">Nivo</label>
+      <select id="level-filter" onchange="onLevelChangeFree()">
+        <option value="all">Tout nivo yo</option>
+        <option value="6af">6ème AF</option>
+        <option value="9af">9ème AF</option>
+        <option value="ns3">NS3</option>
+        <option value="ns4">NS4</option>
+      </select>
+    </div>
+    <div class="select-wrap">
+      <label for="subject-filter">Matyè</label>
+      <select id="subject-filter" onchange="filterExams()">
+        <option value="all">Tout matyè</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="doc-grid" id="exam-grid"></div>
+</section>
+
+<section id="korije" style="background:var(--paper-2);">
+  <div class="section-head">
+    <div>
+      <div class="num">02 — 25 Goud</div>
+      <h2>Egzamen korije</h2>
+      <p>Menm egzamen yo, ak korije konplè. Peman fèt ak MonCash.</p>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="select-wrap">
+      <label for="level-filter-c">Nivo</label>
+      <select id="level-filter-c" onchange="onLevelChangeCorrected()">
+        <option value="all">Tout nivo yo</option>
+        <option value="6af">6ème AF</option>
+        <option value="9af">9ème AF</option>
+        <option value="ns3">NS3</option>
+        <option value="ns4">NS4</option>
+      </select>
+    </div>
+    <div class="select-wrap">
+      <label for="subject-filter-c">Matyè</label>
+      <select id="subject-filter-c" onchange="filterCorrected()">
+        <option value="all">Tout matyè</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="doc-grid" id="corrected-grid"></div>
+</section>
+
+<section id="matyè">
+  <div class="section-head">
+    <div>
+      <div class="num">03 — Pa matyè</div>
+      <h2>Eksplore pa matyè</h2>
+      <p>Tout dokiman klase pa matyè, pou tout nivo.</p>
+    </div>
+  </div>
+
+  <div class="subject-grid" id="subject-grid"></div>
+</section>
+
+<footer>
+  <div>© 2026 Egzamen — Fèt pou elèv ayisyen yo.</div>
+  <div>Kontak: WhatsApp 3XXX-XXXX</div>
+</footer>
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="close" onclick="closeModal()">✕</button>
+    <h3>Peye pou korije a</h3>
+    <div class="doc-name" id="modal-doc-name">—</div>
+
+    <div class="price-tag">
+      <span>Pri</span>
+      <span class="amount">25 Gdes</span>
+      <span class="moncash-logo">MonCash</span>
+    </div>
+
+    <ol class="step-list">
+      <li>Voye 25 goud sou nimewo MonCash: <strong>+509 3XXX-XXXX</strong></li>
+      <li>Kopye <strong>nimewo tranzaksyon</strong> MonCash ba w apre peman an</li>
+      <li>Kole l nan fòm anba a pou konfime telechajman ou</li>
+    </ol>
+
+    <form id="payment-form" onsubmit="return submitPayment(event)">
+      <div class="form-group">
+        <label for="phone">Nimewo telefòn ou</label>
+        <input type="tel" id="phone" placeholder="Ex: 3712 3456" required>
+      </div>
+      <div class="form-group">
+        <label for="txid">Nimewo tranzaksyon MonCash</label>
+        <input type="text" id="txid" placeholder="Ex: 6R7T9K2X" required>
+        <div class="form-hint">Ou jwenn nimewo sa a nan SMS konfimasyon MonCash lan.</div>
+      </div>
+      <button type="submit" class="submit-btn">Konfime peman &amp; telechaje</button>
+    </form>
+    <div class="status-msg" id="status-msg"></div>
+  </div>
+</div>
+
+<script>
+function scrollTo(id){document.querySelector(id).scrollIntoView({behavior:'smooth'});}
+
+// ---- Subjects per level (matches real Haitian curriculum per grade) ----
+const levelSubjects = {
+  '6af': ['Mathématiques','Français','Créole','Sciences Sociales','Sciences Expérimentales'],
+  '9af': ['Mathématiques','Français','Créole','Histoire','Géographie','Sciences Physiques','Sciences de la Vie et de la Terre','Anglais','Espagnol'],
+  'ns3': ['Mathématiques','Français','Physique','Chimie','Biologie','Histoire','Géographie','Philosophie','Anglais','Espagnol'],
+  'ns4': ['Mathématiques','Français','Physique','Chimie','Biologie','Histoire','Géographie','Philosophie','Anglais','Espagnol'],
+};
+
+const subjectLabels = {
+  'Mathématiques':'Matematik', 'Français':'Fransè', 'Créole':'Kreyòl',
+  'Sciences Sociales':'Syans Sosyal', 'Sciences Expérimentales':'Syans Eksperimantal',
+  'Histoire':'Istwa', 'Géographie':'Jewografi', 'Sciences Physiques':'Syans Fizik',
+  'Sciences de la Vie et de la Terre':'SVT', 'Anglais':'Anglè', 'Espagnol':'Panyòl',
+  'Physique':'Fizik', 'Chimie':'Chimi', 'Biologie':'Byoloji', 'Philosophie':'Filozofi',
+};
+
+const levelLabels = {'6af':'6ème AF','9af':'9ème AF','ns3':'NS3','ns4':'NS4'};
+
+// ---- Exam data. `link` points to the actual PDF file in the /docs folder. ----
+const exams = [
+  {level:'6af', subject:'Sciences Sociales', title:'Sciences Sociales — 2024', meta:'PDF · 3 pages'},
+  {level:'6af', subject:'Sciences Expérimentales', title:'Sciences Expérimentales — 2024', meta:'PDF · 3 pages'},
+  {level:'9af', subject:'Mathématiques', title:'Épreuve Officielle — Texte modèle mai 2026', meta:'PDF · 3 pages', link:'docs/Mod%C3%A8le_d_axamen_2026_Math%C3%A9matiques_9e_AF.pdf'},
+  {level:'9af', subject:'Créole', title:'Kominikasyon Kreyòl — Tèks modèl me 2026', meta:'PDF · 2 pages', link:'docs/Mod%C3%A8l_egzamen_Krey%C3%B2l_9e_AF_2026.pdf'},
+  {level:'9af', subject:'Histoire', title:'Histoire d\\'Haïti — 2024', meta:'PDF · 4 pages'},
+  {level:'9af', subject:'Sciences Physiques', title:'Sciences Physiques — 2023', meta:'PDF · 3 pages'},
+  {level:'9af', subject:'Sciences de la Vie et de la Terre', title:'SVT — 2024', meta:'PDF · 4 pages'},
+  {level:'ns3', subject:'Physique', title:'Épreuve Officielle — Session 2025', meta:'PDF · 6 pages'},
+  {level:'ns3', subject:'Mathématiques', title:'Bac Blanc — 2024', meta:'PDF · 5 pages'},
+  {level:'ns3', subject:'Chimie', title:'Chimie — 2024', meta:'PDF · 4 pages'},
+  {level:'ns4', subject:'Chimie', title:'Épreuve Officielle — Session 2025', meta:'PDF · 6 pages'},
+  {level:'ns4', subject:'Français', title:'Dissertation — 2024', meta:'PDF · 4 pages'},
+  {level:'ns4', subject:'Philosophie', title:'Philosophie — 2024', meta:'PDF · 3 pages'},
+];
+
+// Build the "subjects" explorer from the union of all level subjects
+const allSubjectKeys = [...new Set(Object.values(levelSubjects).flat())];
+const subjectIcons = {
+  'Mathématiques':'∑','Français':'✎','Créole':'✦','Sciences Sociales':'⌂',
+  'Sciences Expérimentales':'⚙','Histoire':'⌛','Géographie':'⛰','Sciences Physiques':'⚡',
+  'Sciences de la Vie et de la Terre':'❀','Anglais':'A','Espagnol':'Ñ',
+  'Physique':'⚡','Chimie':'⚗','Biologie':'❀','Philosophie':'◈',
+};
+const subjects = allSubjectKeys.map(key => ({
+  name: subjectLabels[key] || key,
+  key,
+  icon: subjectIcons[key] || '•',
+  count: exams.filter(e => e.subject === key).length + ' dokiman'
+}));
+
+function populateSubjectFilter(selectId, levelSelectId){
+  const levelVal = document.getElementById(levelSelectId).value;
+  const subjectSelect = document.getElementById(selectId);
+  const currentVal = subjectSelect.value;
+  const keys = levelVal === 'all'
+    ? allSubjectKeys
+    : levelSubjects[levelVal];
+  subjectSelect.innerHTML = '<option value="all">Tout matyè</option>' +
+    keys.map(k => `<option value="${k}">${subjectLabels[k] || k}</option>`).join('');
+  // Keep the previous selection if it's still valid for this level
+  if (keys.includes(currentVal)) subjectSelect.value = currentVal;
+}
+
+function renderExamGrid(){
+  const grid = document.getElementById('exam-grid');
+  const level = document.getElementById('level-filter').value;
+  const subject = document.getElementById('subject-filter').value;
+  grid.innerHTML = exams
+    .filter(e => (level==='all'||e.level===level) && (subject==='all'||e.subject===subject))
+    .map(e => `
+      <div class="exam-card">
+        <div class="row-top">
+          <span class="level">${levelLabels[e.level]}</span>
+          <span class="badge free">Gratis</span>
+        </div>
+        <h3>${e.title}</h3>
+        <div class="meta">${subjectLabels[e.subject] || e.subject} · ${e.meta}</div>
+        <div class="card-actions">
+          ${e.link
+            ? `<a class="dl-btn free" href="${e.link}" download style="display:inline-flex;align-items:center;justify-content:center;">Telechaje</a>`
+            : `<button class="dl-btn free" onclick="downloadFree('${e.title.replace(/'/g,"\\'")}')">Telechaje</button>`}
+        </div>
+      </div>
+    `).join('') || '<p style="color:#7a8a84;">Pa gen egzamen pou fitraj sa a.</p>';
+}
+
+function renderCorrectedGrid(){
+  const grid = document.getElementById('corrected-grid');
+  const level = document.getElementById('level-filter-c').value;
+  const subject = document.getElementById('subject-filter-c').value;
+  grid.innerHTML = exams
+    .filter(e => (level==='all'||e.level===level) && (subject==='all'||e.subject===subject))
+    .map(e => `
+      <div class="exam-card">
+        <div class="row-top">
+          <span class="level">${levelLabels[e.level]}</span>
+          <span class="badge paid">25 Gdes</span>
+        </div>
+        <h3>${e.title} — Korije</h3>
+        <div class="meta">${subjectLabels[e.subject] || e.subject} · Korije konplè</div>
+        <div class="card-actions">
+          <button class="dl-btn paid" onclick="openModal('${e.title.replace(/'/g,"\\'")} — ${levelLabels[e.level]}')">Peye &amp; telechaje</button>
+        </div>
+      </div>
+    `).join('') || '<p style="color:#7a8a84;">Pa gen egzamen pou fitraj sa a.</p>';
+}
+
+function renderSubjects(){
+  const grid = document.getElementById('subject-grid');
+  grid.innerHTML = subjects.map(s => `
+    <div class="subject-card" onclick="goToSubject('${s.key}')">
+      <div class="icon">${s.icon}</div>
+      <div>
+        <div class="sname">${s.name}</div>
+        <div class="scount">${s.count}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function goToSubject(key){
+  document.getElementById('subject-filter').value = key;
+  filterExams();
+  scrollTo('#egzamen');
+}
+
+function filterExams(){ renderExamGrid(); }
+function filterCorrected(){ renderCorrectedGrid(); }
+
+function onLevelChangeFree(){ populateSubjectFilter('subject-filter','level-filter'); renderExamGrid(); }
+function onLevelChangeCorrected(){ populateSubjectFilter('subject-filter-c','level-filter-c'); renderCorrectedGrid(); }
+
+function downloadFree(title){
+  alert('Telechajman kòmanse pou: ' + title + '\\n\\n(Ranplase sa a ak vrè lyen fichye PDF ou.)');
+}
+
+let currentDocName = '';
+function openModal(name){
+  currentDocName = name;
+  document.getElementById('modal-doc-name').textContent = name;
+  document.getElementById('modal-overlay').classList.add('active');
+  document.getElementById('status-msg').classList.remove('show','pending','success');
+  document.getElementById('payment-form').reset();
+  document.getElementById('payment-form').style.display = 'block';
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+function submitPayment(e){
+  e.preventDefault();
+  const phone = document.getElementById('phone').value.trim();
+  const txid = document.getElementById('txid').value.trim();
+  const statusEl = document.getElementById('status-msg');
+
+  statusEl.className = 'status-msg show pending';
+  statusEl.textContent = 'N ap verifye peman ou a...';
+
+  // Simulate manual verification step (replace with real backend check).
+  setTimeout(() => {
+    statusEl.className = 'status-msg show success';
+    statusEl.innerHTML = '✅ Mèsi! Nou anrejistre nimewo tranzaksyon <strong>' + txid + '</strong>. Yon fwa nou konfime peman an sou MonCash, lyen telechajman korije a ap voye ba ou nan WhatsApp/SMS nan nimewo ' + phone + '.';
+    document.getElementById('payment-form').style.display = 'none';
+  }, 1200);
+
+  return false;
+}
+
+populateSubjectFilter('subject-filter','level-filter');
+populateSubjectFilter('subject-filter-c','level-filter-c');
+renderExamGrid();
+renderCorrectedGrid();
+renderSubjects();
+</script>
+
+</body>
+</html>
